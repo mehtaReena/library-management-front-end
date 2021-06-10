@@ -4,12 +4,20 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import ConfirmDialog from "./ConfirmDialog";
 import CloseIcon from '@material-ui/icons/Close';
 import Notification from './Notification'
+import EditIcon from '@material-ui/icons/Edit';
 
 function BookList(props) {
     const url = "http://localhost:3300/books";
     const useStyles = makeStyles((theme) => ({
         customPaper:{
-            padding:theme.spacing(2),
+            padding:theme.spacing(12),
+            gutters: theme.spacing(25),
+            width:1000,
+            display: 'flex',
+            margin: 'auto',
+            flexDirection:'column'
+
+
         }
 
       }));
@@ -19,6 +27,7 @@ function BookList(props) {
     let [loading, setLoading] = useState(true);
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' });
     const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
+    const [selectedIndex, setSelectedIndex] = React.useState(1);
 
 
     let getBooks = async () => {
@@ -60,8 +69,15 @@ function BookList(props) {
 
 
 
+
+        const handleListItemClick = (event, index) => {
+          setSelectedIndex(index);
+        };
+
+
+
     return (
-        <Paper className ={classes.customPaper}elevation={3} >
+        <Paper className ={classes.customPaper}elevation={9} >
             <Typography variant="h5">All books</Typography>
             <Divider />
             {loading ? (
@@ -69,13 +85,23 @@ function BookList(props) {
             ) : (
                 <List>
                     {
-                        books.map((book) => (
-                            <ListItem>
+                        books.map((book ,idx) => (
+                            <ListItem
+                            selected={selectedIndex === idx}
+                            onClick={(event) => handleListItemClick(event, idx)}>
                                 <ListItemText primary={book.title}
                                     secondary={book.author} />
+
+
                                 <ListItemSecondaryAction>
+                                <IconButton edge="end" aria-label="delete">
+                                        <EditIcon>
+                                            <CloseIcon fontSize="small" /> </EditIcon>
+                                    </IconButton>
+
+
                                     <IconButton edge="end" aria-label="delete">
-                                        <DeleteIcon
+                                        <DeleteIcon style={{fill: "red"}}
                                             onClick={() => {
                                                 setConfirmDialog({
                                                     isOpen: true,
