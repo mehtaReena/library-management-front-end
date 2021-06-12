@@ -1,27 +1,33 @@
-import { CircularProgress, Divider, IconButton, List, ListItem, ListItemSecondaryAction, ListItemText, makeStyles, Paper, Typography } from '@material-ui/core';
+import { CircularProgress, Divider, Fab, IconButton, List, ListItem, ListItemSecondaryAction, ListItemText, makeStyles, Paper, Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ConfirmDialog from "./ConfirmDialog";
 import CloseIcon from '@material-ui/icons/Close';
 import Notification from './Notification'
 import EditIcon from '@material-ui/icons/Edit';
+import AddIcon from '@material-ui/icons/Add';
+import Controls from "../components/controls/Controls";
+
 
 function BookList(props) {
     const url = "http://localhost:3300/books";
     const useStyles = makeStyles((theme) => ({
-        customPaper:{
-            padding:theme.spacing(12),
+        customPaper: {
+            padding: theme.spacing(12),
             gutters: theme.spacing(25),
-            width:1000,
+            width: 1000,
             display: 'flex',
             margin: 'auto',
-            flexDirection:'column'
+            flexDirection: 'column'
 
 
-        }
+        },
+        extendedIcon: {
+            alignItems: "right"
+        },
 
-      }));
-      const classes = useStyles();
+    }));
+    const classes = useStyles();
 
     let [books, setBooks] = useState();
     let [loading, setLoading] = useState(true);
@@ -56,7 +62,7 @@ function BookList(props) {
             });
         let result = await res.json();
         console.log(result)
-         setBooks(result)
+        setBooks(result)
 
 
 
@@ -70,42 +76,42 @@ function BookList(props) {
 
 
 
-        const handleListItemClick = (event, index) => {
-          setSelectedIndex(index);
-        };
+    const handleListItemClick = (event, index) => {
+        setSelectedIndex(index);
+    };
 
 
 
     return (
-        <Paper className ={classes.customPaper}elevation={9} >
-            <Typography variant="h5">All books</Typography>
+        <Paper className={classes.customPaper} elevation={9} >
+            <Typography variant="h5" align="center">Books</Typography>
             <Divider />
             {loading ? (
                 <CircularProgress />
             ) : (
                 <List>
                     {
-                        books.map((book ,idx) => (
+                        books.map((book, idx) => (
                             <ListItem
-                            selected={selectedIndex === idx}
-                            onClick={(event) => handleListItemClick(event, idx)}>
+                                selected={selectedIndex === idx}
+                                onClick={(event) => handleListItemClick(event, idx)}>
                                 <ListItemText primary={book.title}
                                     secondary={book.author} />
 
 
                                 <ListItemSecondaryAction>
-                                <IconButton edge="end" aria-label="delete">
+                                    <IconButton edge="end" aria-label="delete">
                                         <EditIcon>
                                             <CloseIcon fontSize="small" /> </EditIcon>
                                     </IconButton>
 
 
                                     <IconButton edge="end" aria-label="delete">
-                                        <DeleteIcon style={{fill: "red"}}
+                                        <DeleteIcon style={{ fill: "red" }}
                                             onClick={() => {
                                                 setConfirmDialog({
                                                     isOpen: true,
-                                                    title: 'Are you sure to delete this record?',
+                                                    title: `Are you sure to delete this  "${book.title} "?`,
                                                     subTitle: "You can't undo this operation",
                                                     onConfirm: () => { onDelete(book._id) }
                                                 })
@@ -125,6 +131,14 @@ function BookList(props) {
             <Notification
                 notify={notify}
                 setNotify={setNotify}
+            />
+
+            <Controls.Button
+                text="Add New"
+                variant="outlined"
+                startIcon={<AddIcon />}
+                className={classes.newButton}
+
             />
         </Paper>
     );

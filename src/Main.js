@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './styles.css';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -14,9 +15,10 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import People from '@material-ui/icons/People';
 import Book from '@material-ui/icons/Book';
-import { Container, CssBaseline } from '@material-ui/core';
+import { Container, CssBaseline, Hidden } from '@material-ui/core';
 import { Route, BrowserRouter, Switch, Link } from 'react-router-dom';
 import  BookList from './components/BookList'
+import  SignUp from './components/SignUp'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,9 +39,9 @@ export default function Main() {
       <Wrapper>
         <Switch>
           <Route exact path="/">
-
-
           </Route>
+          <Route exact path='/signup'>
+                        <SignUp /> </Route>
           <Route exact path="/books">
              <BookList/>
 

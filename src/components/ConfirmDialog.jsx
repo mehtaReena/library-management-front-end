@@ -14,20 +14,25 @@ const useStyles = makeStyles(theme => ({
         textAlign: 'center'
     },
     dialogContent: {
-        textAlign: 'center'
+        textAlign: 'center',
+
     },
     dialogAction: {
         justifyContent: 'center'
     },
     titleIcon: {
         backgroundColor: theme.palette.secondary.light,
-        color: theme.palette.secondary.main,
+
+        color: theme.palette.white,
         '&:hover': {
             backgroundColor: theme.palette.secondary.light,
-            cursor: 'default'
+            cursor: 'default',
+            color: theme.palette.white,
         },
         '& .MuiSvgIcon-root': {
-            fontSize: '8rem',
+            fontSize: '5rem',
+
+
         }
     }
 }))
