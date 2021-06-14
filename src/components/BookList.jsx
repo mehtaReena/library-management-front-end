@@ -10,6 +10,7 @@ import Controls from "../components/controls/Controls";
 
 
 function BookList(props) {
+
     const url = "http://localhost:3300/books";
     const useStyles = makeStyles((theme) => ({
         customPaper: {
@@ -37,7 +38,15 @@ function BookList(props) {
 
 
     let getBooks = async () => {
-        let response = await fetch(url);
+        let access_Token = window.localStorage.getItem('access_Token')
+        console.log(" /Book  " ,access_Token)
+        let response = await fetch(url,{
+                method:'GET',
+                headers:{
+                    'Authorization': 'Bearer '+access_Token,
+                    'Content-Type': 'application/json; charset=utf-8'
+                }
+        });
         let data = await response.json();
         console.log(data)
         setBooks(data)

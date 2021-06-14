@@ -1,5 +1,6 @@
 import { Button, CircularProgress, makeStyles, Paper, TextField } from "@material-ui/core";
 import { useState } from "react";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles({
     container: {
@@ -23,36 +24,35 @@ export default function Login() {
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
     const [loading, setLoading] = useState(false)
-
+    const history = useHistory()
 
     const classes = useStyles()
     const loginurl = 'http://localhost:3300/auth/login'
     let submitForm = async () => {
         setLoading(true)
-        let formData = new FormData()
-
-        formData.append("email", email)
-        formData.append("password", password)
-
-
         let response = await fetch(loginurl, {
             method: 'POST',
             body: JSON.stringify({
-                email,
-                password
+                email:email,
+                password:password
+
             }),
             headers: { "Content-Type": "application/json" }
 
         });
-        let data = await response.json
-        if (response.status !== 200) {
 
+        if (response.status !== 200) {
             setLoading(false)
             return
         }
 
-        console.log(data)
-        setLoading(false)
+        else{
+            let data = await response.json();
+            console.log(" on Success!..", data.access_token);
+            setLoading(false)
+            window.localStorage.setItem('access_Token', data.access_token)
+            history.push('/books')
+        }
     }
     return (
         <Paper elevation={2} className={classes.container}>
