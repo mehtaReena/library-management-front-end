@@ -17,8 +17,10 @@ import People from '@material-ui/icons/People';
 import Book from '@material-ui/icons/Book';
 import { Container, CssBaseline, Hidden } from '@material-ui/core';
 import { Route, BrowserRouter, Switch, Link } from 'react-router-dom';
-import  BookList from './components/BookList'
-import  SignUp from './components/SignUp'
+import BookList from './components/BookList'
+import SignUp from './components/SignUp'
+import Login from './components/Login'
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,9 +43,12 @@ export default function Main() {
           <Route exact path="/">
           </Route>
           <Route exact path='/signup'>
-                        <SignUp /> </Route>
+            <SignUp /> </Route>
+            <Route exact path='/login'>
+            <Login /> </Route>
+
           <Route exact path="/books">
-             <BookList/>
+            <BookList />
 
           </Route>
           <Route exact path="/categories">
@@ -97,17 +102,17 @@ function Wrapper(props) {
             {/* <Box/> */}
             {
               [
-                { text: "Books", icon: <Book /> ,link:"/books" },
-                { text: "Categories", icon: <Category /> ,link:"/categories"},
-                { text: "Members", icon: <People /> ,link:"/members"},
-                { text: "IssuedBooks", icon: <Book /> ,link:"/issues"},
+                { text: "Books", icon: <Book />, link: "/books" },
+                { text: "Categories", icon: <Category />, link: "/categories" },
+                { text: "Members", icon: <People />, link: "/members" },
+                { text: "IssuedBooks", icon: <Book />, link: "/issues" },
 
-              ].map(({ text, icon ,link}, idx) =>
-              <Link to={link} onClick={toggleDrawer}>
-                <ListItem className={classes.list} Button key={text}>
-                  <ListItemIcon>{icon}</ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItem>
+              ].map(({ text, icon, link }, idx) =>
+                <Link to={link} onClick={toggleDrawer}>
+                  <ListItem className={classes.list} Button key={text}>
+                    <ListItemIcon>{icon}</ListItemIcon>
+                    <ListItemText primary={text} />
+                  </ListItem>
                 </Link>
               )
             }
@@ -115,8 +120,8 @@ function Wrapper(props) {
         </Drawer>
       </React.Fragment>
       <Container fixed className={classes.paddedContainer}>
-         {props.children}
-         </Container>
+        {props.children}
+      </Container>
 
     </div>
   );

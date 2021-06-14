@@ -55,7 +55,9 @@ export default function SignUp() {
         <Paper elevation={2} className={classes.container}>
             <h1>Sign Up</h1>
             {/* <form autoComplete='off'> */}
-            <TextField label='Name' value={name} onChange={(e) => setName(e.target.value)} name='name' variant='outlined' />
+            <TextField label='Name' value={name} onChange={(e) => setName(e.target.value)} name='name' required variant='outlined'
+
+            />
             <TextField label='Email' value={email} onChange={(e) => setEmail(e.target.value)} name='email' variant='outlined' />
             <TextField label='Password' value={password} onChange={(e) => setPassword(e.target.value)} type='password' name='password' variant='outlined' />
             <TextField label='Confirm Password' value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} type='password' variant='outlined' />
