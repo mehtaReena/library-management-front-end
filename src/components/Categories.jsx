@@ -6,13 +6,12 @@ import CloseIcon from '@material-ui/icons/Close';
 import Notification from './Notification'
 import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
-import Controls from "../components/controls/Controls";
-import axios from "axios";
+import Controls from "./controls/Controls";
 
 
-function BookList(props) {
+function Categories(props) {
 
-    const url = "http://localhost:3300/books";
+    const url = "http://localhost:3300/categories";
     const useStyles = makeStyles((theme) => ({
         customPaper: {
             padding: theme.spacing(12),
@@ -31,27 +30,36 @@ function BookList(props) {
     }));
     const classes = useStyles();
 
-    let [books, setBooks] = useState();
+    let [categories, setCategories] = useState();
     let [loading, setLoading] = useState(true);
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' });
     const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
     const [selectedIndex, setSelectedIndex] = React.useState(1);
 
 
-    let getBooks = async () => {
-        let response = await axios.get(url)
-        let data = await response.data;
+    let getCategory = async () => {
+        console.log(" getCategory  ")
+        let access_Token = window.localStorage.getItem('access_Token')
+        console.log(" /Category  " ,access_Token)
+        let response = await fetch(url,{
+                method:'GET',
+                headers:{
+                    'Authorization': 'Bearer '+access_Token,
+                    'Content-Type': 'application/json; charset=utf-8'
+                }
+        });
+        let data = await response.json();
         console.log(data)
-        setBooks(data)
+        setCategories(data)
         setLoading(false);
     }
     useEffect(() => {
-        getBooks()
+        getCategory()
     }, [])
 
 
     const onDelete = async (id) => {
-        let Removeurl = "http://localhost:3300/books/" + id;
+        let Removeurl = "http://localhost:3300/categories/" + id;
 
         setConfirmDialog({
             ...confirmDialog,
@@ -63,9 +71,8 @@ function BookList(props) {
                 method: 'DELETE'
             });
         let result = await res.json();
-        console.log(result)
-        setBooks(result)
-
+        // console.log(""+ result)
+        setCategories(result)
 
 
         setNotify({
@@ -86,19 +93,19 @@ function BookList(props) {
 
     return (
         <Paper className={classes.customPaper} elevation={9} >
-            <Typography variant="h5" align="center">Books</Typography>
+            <Typography variant="h5" align="center">Categories</Typography>
             <Divider />
             {loading ? (
                 <CircularProgress />
             ) : (
                 <List>
                     {
-                        books.map((book, idx) => (
+                        categories.map((category, idx) => (
                             <ListItem
                                 selected={selectedIndex === idx}
                                 onClick={(event) => handleListItemClick(event, idx)}>
-                                <ListItemText primary={book.title}
-                                    secondary={book.author} />
+                                <ListItemText primary={category.name}
+                                    />
 
 
                                 <ListItemSecondaryAction>
@@ -113,9 +120,9 @@ function BookList(props) {
                                             onClick={() => {
                                                 setConfirmDialog({
                                                     isOpen: true,
-                                                    title: `Are you sure to delete this  "${book.title} "?`,
+                                                    title: `Are you sure to delete this  "${category.name} "?`,
                                                     subTitle: "You can't undo this operation",
-                                                    onConfirm: () => { onDelete(book._id) }
+                                                    onConfirm: () => { onDelete(category._id) }
                                                 })
                                             }}>
                                             <CloseIcon fontSize="small" /> </DeleteIcon>
@@ -146,4 +153,4 @@ function BookList(props) {
     );
 }
 
-export default BookList;
+export default Categories;

@@ -1,5 +1,6 @@
 import { Button, makeStyles, Paper, TextField } from "@material-ui/core";
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
     container: {
@@ -25,6 +26,7 @@ export default function SignUp() {
     const [email, setEmail] = useState('')
     const [loading, setLoading] = useState(false)
     const [image, setImage] = useState(null)
+    const history = useHistory();
 
     const classes = useStyles()
     const url = 'http://localhost:3300/auth/signup'
@@ -42,14 +44,21 @@ export default function SignUp() {
             method: 'POST',
             body: formData
         })
-        if (response.status !== 201) {
-            console.log(await response.text())
+        console.log(response.status)
+        if (response.status !== 200) {
+            // console.log(await response.text())
             setLoading(false)
             return
         }
-        let result = await response.json()
-        console.log(result)
+        else{
+            let result = await response.json()
+        console.log( "   On Successfully SignUp  !" , result)
         setLoading(false)
+        history.push('/login')
+
+        }
+
+
     }
     return (
         <Paper elevation={2} className={classes.container}>

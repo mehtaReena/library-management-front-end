@@ -20,6 +20,9 @@ import { Route, BrowserRouter, Switch, Link } from 'react-router-dom';
 import BookList from './components/BookList'
 import SignUp from './components/SignUp'
 import Login from './components/Login'
+import { useHistory } from "react-router";
+import Categories from './components/Categories'
+import setUpInterceptor from './intercepter'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -36,11 +39,14 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function Main() {
+  let history = useHistory();
+  setUpInterceptor(history)
   return (
-    <BrowserRouter>
+    <>
       <Wrapper>
         <Switch>
           <Route exact path="/">
+
           </Route>
           <Route exact path='/signup'>
             <SignUp /> </Route>
@@ -52,6 +58,7 @@ export default function Main() {
 
           </Route>
           <Route exact path="/categories">
+          <Categories />
 
           </Route>
           <Route exact path="/members">
@@ -63,7 +70,7 @@ export default function Main() {
         </Switch>
 
       </Wrapper>
-    </BrowserRouter>
+    </>
 
   )
 
@@ -71,9 +78,15 @@ export default function Main() {
 
 function Wrapper(props) {
   const classes = useStyles();
+  const history = useHistory()
   let [drawerOpen, setDrawerOpen] = useState(false)
   let toggleDrawer = () => {
     setDrawerOpen((prev) => !prev);
+  }
+
+  function clickHandler(){
+    history.push('/login')
+
   }
 
 
@@ -89,7 +102,7 @@ function Wrapper(props) {
           <Typography variant="h6" className={classes.title}>
             McLaren College Library
           </Typography>
-          <Button color="inherit">Login</Button>
+          <Button color="inherit" onClick={clickHandler}>Login</Button>
         </Toolbar>
       </AppBar>
       <React.Fragment >
