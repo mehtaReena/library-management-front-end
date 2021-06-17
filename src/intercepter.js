@@ -31,7 +31,6 @@ axios.interceptors.request.use(function (req) {
       // history.push("/login")
       return refreshAccessToken(history)
     }
-
     return Promise.reject(error);
   });
 
@@ -40,13 +39,17 @@ axios.interceptors.request.use(function (req) {
 
 async function refreshAccessToken(history) {
   try {
+    const REFERESH_URL = 'http://localhost:3300/auth/token';
+    const BOOK_URL = 'http://localhost:3300/books';
       let refresh_Token = window.localStorage.getItem('refresh_Token')
-      let response = await axios.post('/auth/token', {
+      let response = await axios.post(REFERESH_URL, {
           token: refresh_Token,
       })
+      // console.log(" refreshAccessToken " ,response.data)
       if (response.status === 200) {
+
           window.localStorage.setItem('access_Token', response.data.access_token)
-          return await axios.get('/books')
+          return await axios.get(BOOK_URL)
       }
   } catch (err) {
       history.replace('/login')
