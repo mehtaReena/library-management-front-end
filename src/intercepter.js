@@ -20,22 +20,24 @@ axios.interceptors.request.use(function (req) {
 
 
 
-  axios.interceptors.response.use(function (response) {
-
+  axios.interceptors.response.use(function(response) {
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    // Do something with response data
     return response;
-  }, function (error) {
-
-    console.log("Error :" ,error.response.status)
-    let {status}=error.response
-    if(status===403 ){
-      // history.push("/login")
-      return refreshAccessToken(history)
+}, async function(error) {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    let { status } = error.response
+    let originalRequest = error.config
+    if (status === 403) {
+        await refreshAccessToken()
+        return axios(originalRequest)
+    } else if (status === 401) {
+        history.replace('/login')
     }
     return Promise.reject(error);
-  });
-
+});
 }
-
 
 async function refreshAccessToken(history) {
   try {
@@ -49,7 +51,9 @@ async function refreshAccessToken(history) {
       if (response.status === 200) {
 
           window.localStorage.setItem('access_Token', response.data.access_token)
-          return await axios.get(BOOK_URL)
+          // return await axios.get(BOOK_URL)
+          return response.data.access_token
+
       }
   } catch (err) {
       history.replace('/login')
